@@ -1,7 +1,7 @@
 from rxconfig import config
 from AR_Web.components.navbar import navbar
-from AR_Web.components.sidebar import sidebar
-from AR_Web.views.conntent.content import content
+from AR_Web.views.sidebar.sidebar import sidebar
+from AR_Web.views.content.content import content
 import reflex as rx
 
 
@@ -16,7 +16,7 @@ def index() -> rx.Component:
             padding="2em",
         )
 
-        
+
     )
 
 

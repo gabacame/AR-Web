@@ -1,22 +1,6 @@
 import reflex as rx
-from AR_Web.components.uploadbar import upload_button
-import os
+from AR_Web.components.uploadbar import upload_button, refresh_button, delete_button,State
 
-def delete_file(folder_path, file_name):
-    file_path = os.path.join(folder_path, file_name)
-    
-    if os.path.isfile(file_path):
-        try:
-            os.remove(file_path)
-            print(f"File '{file_name}' successfully deleted from folder '{folder_path}'.")
-        except Exception as e:
-            print(f"An error occurred while trying to delete the file: {e}")
-    else:
-        print(f"File '{file_name}' does not exist in the folder '{folder_path}'.")
-
-def list_files_in_folder(folder):
-    files = [file for file in os.listdir(folder) if os.path.isfile(os.path.join(folder, file))]
-    return files
 
 def table() -> rx.Component:
     return rx.container(
@@ -28,16 +12,12 @@ def table() -> rx.Component:
                 )
             ),
             rx.table.body(
-                    rx.foreach(list_files_in_folder('uploaded_files'), 
-                               lambda file: 
+                    rx.foreach(State.files, 
+                               lambda file:
                                rx.table.row(
                                    rx.table.cell(file),
                                    rx.table.cell(
-                                       rx.button("Delete",
-                                            bg="red",
-                                            align="center",
-                                            
-                                   ))
+                                        delete_button(file))
                                 )
                     )
             )  
@@ -48,7 +28,10 @@ def manage_data() -> rx.Component:
     return rx.box(
         rx.heading("MANAGE DATA PAGE"),
 ##---Upload Button---##
-    upload_button(),
+    rx.hstack(
+        upload_button(),
+        refresh_button()
+    ),
 ##---Upload Button---##
 ##-------Table-------##
     table()

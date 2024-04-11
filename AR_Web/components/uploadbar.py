@@ -1,8 +1,11 @@
 import reflex as rx
+import os
+from pathlib import Path
 
 class State(rx.State):
     img: list[str]
-    
+    files:list[str]
+
     async def handle_upload(self, files: list[rx.UploadFile]):
         for file in files:
             if file.content_type == "text/csv":
@@ -11,6 +14,16 @@ class State(rx.State):
                 with outfile.open("wb") as file_object:
                     file_object.write(upload_data)
                 self.img.append(file.filename)
+                await self.list_files_in_folder()
+
+    async def list_files_in_folder(self):
+        self.files = [file for file in os.listdir('uploaded_files') if os.path.isfile(os.path.join('uploaded_files', file))]
+
+    async def delete_file_from_folder(self, file_name: str):
+        file_path = Path('uploaded_files') / file_name
+        os.remove(file_path)
+        await self.list_files_in_folder()
+
 
 def uploadbar() -> rx.Component:
     return rx.vstack(
@@ -35,3 +48,30 @@ def upload_button() -> rx.Component:
                 on_drop=State.handle_upload(rx.upload_files(upload_id="upload_csv"))
             ),
         )
+def refresh_button() -> rx.Component:
+    return rx.button(
+        "Refresh",
+        on_click=State.list_files_in_folder()
+    )
+
+def delete_button(file_name) -> rx.Component:
+    return rx.alert_dialog.root(
+    rx.alert_dialog.trigger(
+        rx.button("Delete", bg="red"),
+    ),
+    rx.alert_dialog.content(
+        rx.alert_dialog.title("DELETE"),
+        rx.alert_dialog.description(
+            "Are you sure? This file will no longer be accessible.",
+        ),
+        rx.flex(
+            rx.alert_dialog.cancel(
+                rx.button("Cancel"),
+            ),
+            rx.alert_dialog.action(
+                rx.button("Delete", bg="red", on_click=State.delete_file_from_folder(file_name)),
+            ),
+            spacing="3",
+        ),
+    ),
+)

@@ -6,5 +6,5 @@ def principal() -> rx.Component:
         rx.heading("Welcome to Auto Regression Web"),
         rx.text(f"""This page is for make regressions in automaticc way, 
                 just draging your data here."""),
-        #uploadbar()
+        uploadbar()
     )

@@ -1,15 +1,15 @@
 import reflex as rx
 from AR_Web.styles import styles
-from AR_Web.components.button import button, Button_State
+from AR_Web.components.button import button
 
 
 def sidebar() -> rx.Component:
     return rx.vstack(
         rx.heading("Options", margin_bottom="1em"),
 ##############-SIDE BAR PARTS-#######################
-        button("Data", Button_State.data_state),
-        button("Fit", Button_State.fit_state),
-        button("Predict",Button_State.predict_state),
+        button("Data","/manage_data"),
+        button("Fit","/fit_page"),
+        button("Predict","/predict_page"),
 ######################################################        
         position="fixed",
         height="100%",

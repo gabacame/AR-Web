@@ -1,6 +1,6 @@
 import reflex as rx
 from AR_Web.styles import styles
-from AR_Web.components.button import Button_State
+
 
 
 def navbar() -> rx.Component:
@@ -9,7 +9,8 @@ def navbar() -> rx.Component:
                 align="center",
                 color="white",
                 bg="grey",
-                on_click=Button_State.default_state),
+                on_click=rx.redirect('/')
+        ),
         position="sticky",
         align="center",
         bg="grey"

@@ -24,6 +24,12 @@ class State(rx.State):
         os.remove(file_path)
         await self.list_files_in_folder()
 
+    actual_dataset:str
+    actual_model:str
+
+    def handle_submit(self, actual_dataset):
+        self.actual_dataset= actual_dataset
+
 
 def uploadbar() -> rx.Component:
     return rx.vstack(
@@ -34,7 +40,6 @@ def uploadbar() -> rx.Component:
             padding="5em",
             on_drop=State.handle_upload(rx.upload_files(upload_id="upload_csv")),
         ),
-        rx.foreach(State.img, lambda img: rx.text(img)),
         padding="5em",
     )
 
